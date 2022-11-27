@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-Site-DF8584D4-6EFA-4121-B28B-A7B4CB655420</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="BlazorInputFile" />
+    <None Remove="MudBlazor" />
+    <None Remove="Data\" />
+    <None Remove="Services\" />
+    <None Remove="sautinsoft.document" />
+    <None Remove="itext7" />
+    <None Remove="Spire.XLS" />
+    <None Remove="sautinsoft.exceltopdf" />
+    <None Remove="runtime.osx.10.10-x64.CoreCompat.System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+<PrivateAssets>all</PrivateAssets>
+</PackageReference>
+    <PackageReference Include="MudBlazor" Version="6.1.2" />
+    <PackageReference Include="sautinsoft.document" Version="5.6.8.16" />
+    <PackageReference Include="itext7" Version="7.2.4" />
+    <PackageReference Include="Spire.XLS" Version="12.10.1" />
+    <PackageReference Include="sautinsoft.exceltopdf" Version="5.6.11.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="wwwroot\Files\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\Files\" />
+  </ItemGroup>
+</Project>

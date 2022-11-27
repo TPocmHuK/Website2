@@ -1,0 +1,229 @@
+﻿@inject ISnackbar Snackbar
+@using Models
+@using Microsoft.AspNetCore.Http
+@using Site.Data
+@using System.Collections.Generic
+@using iText.Kernel.Pdf
+@using Spire.Xls
+@using SautinSoft.Document
+
+<div class="fullsize-container" style=" width: 1150px; height: 100%; margin: 0 auto; overflow: hidden;">
+
+    <MudCarousel Class="mud-width-full" @ref="_carousel" Style="height:650px;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" TData="object">
+        <MudCarouselItem Transition="transition">
+            <h2 class="description">Добавьте документ, который хотите распечатать</h2>
+            <MudPaper @ondragenter="@SetDragClass" @ondragleave="@ClearDragClass" @ondragend="@ClearDragClass" Height="425px" Width="90%" Outlined="true" Class="@DragClass" Style="margin: 0 auto; border:3px dashed #bdbdbd; background-color: #e0e0e0;">
+                @if (!Clearing)
+                {
+                    <InputFile OnChange="OnInputFileChanged" class="absolute mud-width-full mud-height-full overflow-hidden z-2" style="opacity: 0; border: 15px; top: 0px" accept=".docx, .doc, .pdf, .xls, .xlsx" />
+                }
+                <MudText Class="DragNDrop">@MudText</MudText>
+
+                @foreach (var file in fileNames)
+                {
+                    <div class="container">
+                        <MudChip Icon="@Icons.Material.Filled.DocumentScanner" Color="MudBlazor.Color.Dark" Text="@file" />
+                    </div>
+                }
+            </MudPaper>
+
+            <MudToolBar DisableGutters="true" Class="gap-4">
+                <MudButton OnClick="Upload" Disabled="@(!fileNames.Any())" Class="button" DisableRipple="true" DisableElevation="true" type="submit">Загрузить</MudButton>
+                <MudButton OnClick="Clear" Disabled="@(!fileNames.Any())" Class="button" DisableRipple="true" DisableElevation="true">Очистить</MudButton>
+
+                <style>
+                    .container {
+                        text-align: center;
+                        width: 100%;
+                        margin: 0 auto;
+                    }
+
+                    .button {
+                        color: #090909;
+                        padding: 0.7em 1.7em;
+                        font-size: 18px;
+                        border-radius: 0.5em;
+                        background: #e8e8e8;
+                        border: 1px solid #e8e8e8;
+                        transition: all .3s;
+                        box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+                        font-family: 'Montserrat', sans-serif;
+                        font-weight: 300;
+                    }
+
+                        .button:hover {
+                            box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+                        }
+
+                        .button:active {
+                            color: #666;
+                            box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
+                        }
+
+                    .gap-4 {
+                        text-align: center;
+                        margin: 1% auto;
+                        display: flex;
+                        justify-content: center;
+                    }
+
+                    .DragNDrop {
+                        margin: 19% auto;
+                        font-family: 'Montserrat', sans-serif;
+                        color: #bdbdbd;
+                        font-weight: 900;
+                        text-align: center;
+                        justify-content: center;
+                    }
+
+                    .mud-paper.mud-paper-outlined.relative {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    .mud-typography.mud-typography-body1 {
+                        margin: 0 auto;
+                        text-align: center;
+                        position: absolute;
+                    }
+
+                    .mud-button-root.align-self-center {
+                        top: -70px;
+                    }
+
+                    .absolute.mud-width-full.mud-height-full.overflow-hidden:hover {
+                        cursor: pointer;
+                    }
+                </style>
+            </MudToolBar>
+        </MudCarouselItem>
+
+        <MudCarouselItem Transition="transition">
+            <div class="d-flex" style="height:100%">
+                <h2 class="description">Количество страниц в документе: @pagesCounter</h2>
+            </div>
+        </MudCarouselItem>
+
+        <MudCarouselItem Transition="transition">
+            <div class="d-flex" style="height:100%">
+
+            </div>
+        </MudCarouselItem>
+
+    </MudCarousel>
+
+</div>
+
+@code {
+    private bool arrows = false;
+    private bool bullets = false;
+    private bool enableSwipeGesture = true;
+    private bool autocycle = false;
+    private Transition transition = Transition.Slide;
+
+    public string MudText = "Перетащите файл сюда или нажмите, чтобы загрузить";
+    private string _path = "C:/Новая папка/Website-master/Site/wwwroot/Files/";
+
+    private bool Clearing = false;
+    private static string DefaultDragClass = "relative rounded-lg border-dashed border-2 pa-4 mt-4 mud-width-full mud-height-full";
+    private string DragClass = DefaultDragClass;
+
+    private int pagesCounter;
+
+    private MudCarousel<object> _carousel;
+
+    private List<string> fileNames = new List<string>();
+    private List<string> allowedContentTypes = new List<string>() { "application/msword",
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" };
+
+    IBrowserFile file;
+
+    private void OnInputFileChanged(InputFileChangeEventArgs e)
+    {
+        ClearDragClass();
+        file = e.File;
+
+        if (fileNames.Count == 1)
+            fileNames[0] = file.Name;
+        MudText = "";
+
+        if (fileNames.Count >= 1)
+            return;
+
+        if (allowedContentTypes.Contains(file.ContentType))
+            fileNames.Add(file.Name);
+    }
+
+    private async Task Clear()
+    {
+        Clearing = true;
+        fileNames.Clear();
+        ClearDragClass();
+        await Task.Delay(100);
+        Clearing = false;
+        MudText = "Перетащите файл сюда или нажмите, чтобы загрузить.";
+    }
+
+    private async Task Upload()
+    {
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Add("TODO: Upload your files!", Severity.Normal);
+        var ms = new MemoryStream();
+        await file.OpenReadStream(5120000000).CopyToAsync(ms);
+        await File.WriteAllBytesAsync(_path + file.Name, ms.ToArray());
+        _carousel.MoveTo(1);
+
+        if (Path.GetExtension(_path + file.Name).Contains(".docx"))
+        {
+            DocumentCore dc = DocumentCore.Load(_path + file.Name);
+            pagesCounter = Convert.ToInt32(dc?.Document.Properties.BuiltIn[BuiltInDocumentProperty.Pages]);
+            Console.WriteLine(_path + file.Name);
+            Console.WriteLine(pagesCounter);
+        }
+
+        if (Path.GetExtension(_path + file.Name).Contains(".doc"))
+        {
+            DocumentCore dc = DocumentCore.Load(_path + file.Name);
+            dc.CalculateStats();
+            pagesCounter = Convert.ToInt32(dc?.Document.Properties.BuiltIn[BuiltInDocumentProperty.Pages]);
+            Console.WriteLine(_path + file.Name);
+            Console.WriteLine(pagesCounter);
+        }
+
+        if (Path.GetExtension(_path + file.Name).Contains(".pdf"))
+        {
+            PdfDocument pdfDocument = new PdfDocument(new PdfReader(_path + file.Name));
+            pagesCounter = pdfDocument.GetNumberOfPages();
+        }
+
+        if (Path.GetExtension(_path + file.Name).Contains(".xls"))
+        {
+            Workbook wb = new Workbook();
+            wb.LoadFromFile(_path + file.Name);
+            var pageInfoList = wb.GetSplitPageInfo();
+            int sheetCount = pageInfoList.Count;
+            int pageCount = 0;
+            Console.WriteLine(sheetCount);
+            for (int i = 0; i < sheetCount; i++)
+            {
+                pageCount += pageInfoList[i].Count;
+                Console.WriteLine(pageCount);
+                pagesCounter = pageCount;
+            }
+        }
+    }
+
+    private void SetDragClass()
+    {
+        DragClass = $"{DefaultDragClass} mud-border-primary";
+    }
+
+    private void ClearDragClass()
+    {
+        DragClass = DefaultDragClass;
+    }
+}
