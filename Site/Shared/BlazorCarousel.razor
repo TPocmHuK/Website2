@@ -8,7 +8,6 @@
 @using SautinSoft.Document
 
 <div class="fullsize-container" style=" width: 1150px; height: 100%; margin: 0 auto; overflow: hidden;">
-
     <MudCarousel Class="mud-width-full" @ref="_carousel" Style="height:650px;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" TData="object">
         <MudCarouselItem Transition="transition">
             <h2 class="description">Добавьте документ, который хотите распечатать</h2>
@@ -22,6 +21,9 @@
                 @foreach (var file in fileNames)
                 {
                     <div class="container">
+                        <MudOverlay Visible="isVisible" DarkBackground="false" Absolute="true">
+                            <MudProgressCircular Color="MudBlazor.Color.Primary" Size="Size.Large" Indeterminate="true" />
+                        </MudOverlay>
                         <MudChip Icon="@Icons.Material.Filled.DocumentScanner" Color="MudBlazor.Color.Dark" Text="@file" />
                     </div>
                 }
@@ -120,6 +122,8 @@
     private bool bullets = false;
     private bool enableSwipeGesture = true;
     private bool autocycle = false;
+    private bool indeterminate;
+    private bool isVisible;
     private Transition transition = Transition.Slide;
 
     public string MudText = "Перетащите файл сюда или нажмите, чтобы загрузить";
@@ -172,10 +176,11 @@
     {
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
         Snackbar.Add("TODO: Upload your files!", Severity.Normal);
+        isVisible = true;
+        indeterminate = true;
         var ms = new MemoryStream();
         await file.OpenReadStream(5120000000).CopyToAsync(ms);
         await File.WriteAllBytesAsync(_path + file.Name, ms.ToArray());
-        _carousel.MoveTo(1);
 
         if (Path.GetExtension(_path + file.Name).Contains(".docx"))
         {
@@ -214,6 +219,12 @@
                 Console.WriteLine(pageCount);
                 pagesCounter = pageCount;
             }
+        }
+
+        if (pagesCounter != 0)
+        {
+            indeterminate = false;
+            _carousel.MoveTo(1);
         }
     }
 
