@@ -558,6 +558,8 @@
 
     private async Task Upload()
     {
+        string full_path = _path + file.Name;
+
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
         Snackbar.Add("TODO: Upload your files!", Severity.Normal);
         isVisible = true;
@@ -565,6 +567,8 @@
         var ms = new MemoryStream();
         await file.OpenReadStream(5120000000).CopyToAsync(ms);
         await File.WriteAllBytesAsync(_path + file.Name, ms.ToArray());
+
+        runConvertFileToPdf(full_path);
 
         if (Path.GetExtension(_path + file.Name).Contains(".docx"))
         {
@@ -628,4 +632,55 @@
     {
         DragClass = DefaultDragClass;
     }
+
+    private void runConvertFileToPdf(string full_file_name)
+{
+    string full_path = Path.GetFullPath(full_file_name);
+    string ext = Path.GetExtension(full_path);
+    string file_name_pdf = Path.GetDirectoryName(full_path) + "\\convert_file_" + Path.GetFileNameWithoutExtension(full_path) + "_.pdf";
+
+    switch (ext)
+    {
+        case ".doc":
+        case ".docx":
+            var appWord = new Microsoft.Office.Interop.Word.Application();
+            appWord.Visible = false;
+                // appWord.DisplayAlerts = False;
+            if (appWord.Documents != null)
+            {
+                    //    yourDoc is your word document
+                var wordDocument = appWord.Documents.Open(full_path);
+
+                if (wordDocument != null)
+                {
+                    wordDocument.ExportAsFixedFormat(file_name_pdf, Microsoft.Office.Interop.Word.WdExportFormat.wdExportFormatPDF);
+                        //wordDocument.Close(false, "", false);
+                    wordDocument.Close();
+                }
+                appWord.Quit();
+            }
+            break;
+         case ".xls":
+         case ".xlsx":
+            var appExel = new Microsoft.Office.Interop.Excel.Application();
+            appExel.Visible = false;
+            if (appExel.Workbooks != null)
+            {
+                var excelDocument = appExel.Workbooks.Open(full_path);
+                if(excelDocument != null)
+                {
+                    excelDocument.ExportAsFixedFormat(Microsoft.Office.Interop.Excel.XlFixedFormatType.xlTypePDF, file_name_pdf);
+                    excelDocument.Close(); //Close document
+                        
+                }
+
+                appExel.Quit(); //Important: When you forget this Excel keeps running in the background
+            }
+            break;
+        default:
+            return;
+            break;
+    }
+    return;
+}
 }
