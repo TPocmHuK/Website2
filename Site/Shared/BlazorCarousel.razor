@@ -554,6 +554,8 @@
         await Task.Delay(100);
         Clearing = false;
         MudText = "Перетащите файл сюда или нажмите, чтобы загрузить.";
+
+        CheckAllPagesInkCoverage();
     }
 
     private async Task Upload()
@@ -634,53 +636,66 @@
     }
 
     private void runConvertFileToPdf(string full_file_name)
-{
-    string full_path = Path.GetFullPath(full_file_name);
-    string ext = Path.GetExtension(full_path);
-    string file_name_pdf = Path.GetDirectoryName(full_path) + "\\convert_file_" + Path.GetFileNameWithoutExtension(full_path) + "_.pdf";
-
-    switch (ext)
     {
-        case ".doc":
-        case ".docx":
-            var appWord = new Microsoft.Office.Interop.Word.Application();
-            appWord.Visible = false;
+        string full_path = Path.GetFullPath(full_file_name);
+        string ext = Path.GetExtension(full_path);
+        string file_name_pdf = Path.GetDirectoryName(full_path) + "\\convert_file_" + Path.GetFileNameWithoutExtension(full_path) + "_.pdf";
+
+        switch (ext)
+        {
+            case ".doc":
+            case ".docx":
+                var appWord = new Microsoft.Office.Interop.Word.Application();
+                appWord.Visible = false;
                 // appWord.DisplayAlerts = False;
-            if (appWord.Documents != null)
-            {
+                if (appWord.Documents != null)
+                {
                     //    yourDoc is your word document
-                var wordDocument = appWord.Documents.Open(full_path);
+                    var wordDocument = appWord.Documents.Open(full_path);
 
-                if (wordDocument != null)
-                {
-                    wordDocument.ExportAsFixedFormat(file_name_pdf, Microsoft.Office.Interop.Word.WdExportFormat.wdExportFormatPDF);
+                    if (wordDocument != null)
+                    {
+                        wordDocument.ExportAsFixedFormat(file_name_pdf, Microsoft.Office.Interop.Word.WdExportFormat.wdExportFormatPDF);
                         //wordDocument.Close(false, "", false);
-                    wordDocument.Close();
+                        wordDocument.Close();
+                    }
+                    appWord.Quit();
                 }
-                appWord.Quit();
-            }
-            break;
-         case ".xls":
-         case ".xlsx":
-            var appExel = new Microsoft.Office.Interop.Excel.Application();
-            appExel.Visible = false;
-            if (appExel.Workbooks != null)
-            {
-                var excelDocument = appExel.Workbooks.Open(full_path);
-                if(excelDocument != null)
+                break;
+            case ".xls":
+            case ".xlsx":
+                var appExel = new Microsoft.Office.Interop.Excel.Application();
+                appExel.Visible = false;
+                if (appExel.Workbooks != null)
                 {
-                    excelDocument.ExportAsFixedFormat(Microsoft.Office.Interop.Excel.XlFixedFormatType.xlTypePDF, file_name_pdf);
-                    excelDocument.Close(); //Close document
-                        
-                }
+                    var excelDocument = appExel.Workbooks.Open(full_path);
+                    if(excelDocument != null)
+                    {
+                        excelDocument.ExportAsFixedFormat(Microsoft.Office.Interop.Excel.XlFixedFormatType.xlTypePDF, file_name_pdf);
+                        excelDocument.Close(); //Close document
 
-                appExel.Quit(); //Important: When you forget this Excel keeps running in the background
-            }
-            break;
-        default:
-            return;
-            break;
+                    }
+
+                    appExel.Quit(); //Important: When you forget this Excel keeps running in the background
+                }
+                break;
+            default:
+                return;
+        }
+        return;
     }
-    return;
-}
+
+    private static void CheckAllPagesInkCoverage()
+        {
+            Dictionary<int, GhostscriptPageInkCoverage> pages = GhostscriptPdfInfo.GetInkCoverage("C:/Users/avech/source/repos/TelegramBot/TelegramBot/14.pdf");
+
+            string outputTextTemplate = "Page {0} ink coverage -> C:{1}% / M:{2}% / Y:{3}% / K:{4}%";
+
+            foreach (var kvp in pages)
+            {
+                GhostscriptPageInkCoverage pic = kvp.Value;
+
+                Console.WriteLine(outputTextTemplate, pic.Page, pages[pic.Page].C, pages[pic.Page].M, pages[pic.Page].Y, pages[pic.Page].K);
+            }
+        }
 }
