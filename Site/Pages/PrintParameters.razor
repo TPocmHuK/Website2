@@ -1,0 +1,163 @@
+﻿    @*<h2 class="description">Количество страниц в документе: @pagesCounter</h2>*@
+
+    <div style="height: 100%">
+        <div class="row" style="width:150%; margin:auto">
+            <div class="col-12 col-md-8" style="padding-top: 35px; padding-left: 35px; padding-right: 35px">
+                <div class="card bg-primary shadow-soft border-light p-4">
+                    <!-- Header -->
+                    <div class="card-header border-bottom text-center">
+                        <span class="d-block">
+                            <span class="display-1 font-weight-bold">
+                                <span class="align-top font-medium"></span>@pagesCounter
+                            </span>
+                            <span class="text-gray font-small">/ Страниц в документе</span>
+                        </span>
+                    </div>
+                    <!-- End Header -->
+                    <!-- Content -->
+                    <div class="card-body">
+                        <p>А если подробнее</p>
+                        <ul class="list-unstyled mb-4">
+                            <li class="list-item pb-2"><strong>Чёрно-белых:</strong> </li>
+                            <li class="list-item pb-2"><strong>Цветных:</strong> </li>
+                        </ul>
+                    </div>
+                    <!-- End Content -->
+                </div>
+            </div>
+        </div>
+        <div class="row" style="width:150%; margin:auto">
+            <div class="col-12 col-md-8" style="padding-top: 35px; padding-left: 35px; padding-right: 35px">
+                <div class="card bg-primary shadow-soft border-light p-4">
+                    <!-- Header -->
+                    <div class="card-header border-bottom text-center">
+                        <span class="d-block">
+                            <span class="display-1 font-weight-bold">
+                                <span class="align-top font-medium"></span>Теперь давайте выберем формат печати
+                            </span>
+                        </span>
+                    </div>
+                    <!-- End Header -->
+                    <!-- Content -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <!-- Tab Nav -->
+                                <div class="nav-wrapper position-relative mb-4" style="justify-content: space-around">
+                                    <fieldset>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exampleRadios1" id="exampleRadios1" value="option1">
+                                            <label class="form-check-label" for="exampleRadios1">
+                                                А1
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exampleRadios1" id="exampleRadios2" value="option2">
+                                            <label class="form-check-label" for="exampleRadios2">
+                                                А2
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exampleRadios1" id="exampleRadios3" value="option3">
+                                            <label class="form-check-label" for="exampleRadios3">
+                                                А3
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exampleRadios1" id="exampleRadios4" value="option4" checked>
+                                            <label class="form-check-label" for="exampleRadios4">
+                                                А4
+                                            </label>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <!-- End of Tab Nav -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Content -->
+            </div>
+        </div>
+
+        <div class="row" style="width:150%; margin:auto">
+            <div class="col-12 col-md-8" style="padding-top: 35px; padding-left: 35px; padding-right: 35px">
+                <div class="card bg-primary shadow-soft border-light p-4">
+                    <!-- Header -->
+                    <div class="card-header border-bottom text-center">
+                        <div class="switch-holder">
+                            <div class="switch-label">
+                                <i class="fa fa-bluetooth-b"></i><span>Учитывать цветность при печати?</span>
+                            </div>
+                            <div class="switch-toggle">
+                                <input type="checkbox" id="bluetooth">
+                                <label for="bluetooth"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Header -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="width:150%; margin:auto">
+            <div class="col-12 col-md-8" style="padding: 35px">
+                <div class="card bg-primary shadow-soft border-light p-4">
+                    <!-- Header -->
+                    <div class="card-header border-bottom text-center">
+                        <span class="d-block">
+                            <span class="display-1 font-weight-bold">
+                                <span class="align-top font-medium"></span>Какие страницы напечатать?
+                            </span>
+                        </span>
+                    </div>
+                    <!-- End Header -->
+                    <!-- Content -->
+                    <div class="card-body">
+                        <fieldset>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios2" id="exampleRadios5" value="option5" checked>
+                                <label class="form-check-label" for="exampleRadios5">
+                                    Все
+                                </label>
+                            </div>
+                            <div class="form-check" style="display: inline-block">
+                                <input class="form-check-input" type="radio" name="exampleRadios2" id="exampleRadios6" value="option6">
+                                <label class="form-check-label" for="exampleRadios6">
+                                    Выбрать
+                                </label>
+                                <div class="form-group" style="display: inline-block">
+                                    <div class="input-group mb-4">
+                                        <input class="form-control" id="exampleInputIcon2" placeholder="Пример: 1, 2, 3, 5-8..." aria-label="Input group" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <!-- End Content -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <MudToolBar DisableGutters="true" Class="gap-4">
+        <MudButton OnClick="Back" Disabled="false" Class="button" DisableRipple="true" DisableElevation="false">Назад</MudButton>
+        <MudButton Disabled="false" Class="button" DisableRipple="true" DisableElevation="false">Оформить заказ</MudButton>
+    </MudToolBar>
+
+
+@code {
+    [Parameter]
+    public Transition transition { get; set; }
+
+    [Parameter]
+    public int pagesCounter { get; set; }
+
+    [Parameter]
+    public Action ParentMethod { get; set; }
+
+    private void Back()
+    {
+        ParentMethod?.Invoke();
+    }
+}

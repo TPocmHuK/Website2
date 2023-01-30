@@ -37,16 +37,10 @@
     <PackageReference Include="Spire.XLS" Version="12.10.1" />
     <PackageReference Include="sautinsoft.exceltopdf" Version="5.6.11.14" />
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\Models\Models.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <Folder Include="Areas\" />
     <Folder Include="Data\" />
     <Folder Include="wwwroot\Files\" />
-    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\Files\" />

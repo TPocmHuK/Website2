@@ -1,8 +1,7 @@
 ﻿@inject ISnackbar Snackbar
-@using Models
 @using Microsoft.AspNetCore.Http
-@using Site.Data
 @using System.Collections.Generic
+@using Site.Services
 @using iText.Kernel.Pdf
 @using Spire.Xls
 @using SautinSoft.Document
@@ -36,154 +35,8 @@
         </MudCarouselItem>
         
         <MudCarouselItem Transition="transition" Style="bottom: auto">
-            @*<h2 class="description">Количество страниц в документе: @pagesCounter</h2>*@
-
-            <div style="height: 100%">
-                <div class="row" style="width:150%; margin:auto">
-                    <div class="col-12 col-md-8" style="padding-top: 35px; padding-left: 35px; padding-right: 35px">
-                        <div class="card bg-primary shadow-soft border-light p-4">
-                            <!-- Header -->
-                            <div class="card-header border-bottom text-center">
-                                <span class="d-block">
-                                    <span class="display-1 font-weight-bold">
-                                        <span class="align-top font-medium"></span>@pagesCounter
-                                    </span>
-                                    <span class="text-gray font-small">/ Страниц в документе</span>
-                                </span>
-                            </div>
-                            <!-- End Header -->
-                            <!-- Content -->
-                            <div class="card-body">
-                                <p>А если подробнее</p>
-                                <ul class="list-unstyled mb-4">
-                                    <li class="list-item pb-2"><strong>Чёрно-белых:</strong> </li>
-                                    <li class="list-item pb-2"><strong>Цветных:</strong> </li>
-                                </ul>
-                            </div>
-                            <!-- End Content -->
-                        </div>
-                    </div>
-                </div>
-                <div class="row" style="width:150%; margin:auto">
-                    <div class="col-12 col-md-8" style="padding-top: 35px; padding-left: 35px; padding-right: 35px">
-                        <div class="card bg-primary shadow-soft border-light p-4">
-                            <!-- Header -->
-                            <div class="card-header border-bottom text-center">
-                                <span class="d-block">
-                                    <span class="display-1 font-weight-bold">
-                                        <span class="align-top font-medium"></span>Теперь давайте выберем формат печати
-                                    </span>
-                                </span>
-                            </div>
-                            <!-- End Header -->
-                            <!-- Content -->
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <!-- Tab Nav -->
-                                        <div class="nav-wrapper position-relative mb-4" style="justify-content: space-around">
-                                            <fieldset>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="exampleRadios1" id="exampleRadios1" value="option1">
-                                                    <label class="form-check-label" for="exampleRadios1">
-                                                        А1
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="exampleRadios1" id="exampleRadios2" value="option2">
-                                                    <label class="form-check-label" for="exampleRadios2">
-                                                        А2
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="exampleRadios1" id="exampleRadios3" value="option3">
-                                                    <label class="form-check-label" for="exampleRadios3">
-                                                        А3
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="exampleRadios1" id="exampleRadios4" value="option4" checked>
-                                                    <label class="form-check-label" for="exampleRadios4">
-                                                        А4
-                                                    </label>
-                                                </div>
-                                            </fieldset>
-                                        </div>
-                                        <!-- End of Tab Nav -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Content -->
-                    </div>
-                </div>
-
-                <div class="row" style="width:150%; margin:auto">
-                    <div class="col-12 col-md-8" style="padding-top: 35px; padding-left: 35px; padding-right: 35px">
-                        <div class="card bg-primary shadow-soft border-light p-4">
-                            <!-- Header -->
-                            <div class="card-header border-bottom text-center">
-                                <div class="switch-holder">
-                                    <div class="switch-label">
-                                        <i class="fa fa-bluetooth-b"></i><span>Учитывать цветность при печати?</span>
-                                    </div>
-                                    <div class="switch-toggle">
-                                        <input type="checkbox" id="bluetooth">
-                                        <label for="bluetooth"></label>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Header -->
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row" style="width:150%; margin:auto">
-                    <div class="col-12 col-md-8" style="padding: 35px">
-                        <div class="card bg-primary shadow-soft border-light p-4">
-                            <!-- Header -->
-                            <div class="card-header border-bottom text-center">
-                                <span class="d-block">
-                                    <span class="display-1 font-weight-bold">
-                                        <span class="align-top font-medium"></span>Какие страницы напечатать?
-                                    </span>
-                                </span>
-                            </div>
-                            <!-- End Header -->
-                            <!-- Content -->
-                            <div class="card-body">
-                                <fieldset>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="exampleRadios2" id="exampleRadios5" value="option5" checked>
-                                        <label class="form-check-label" for="exampleRadios5">
-                                            Все
-                                        </label>
-                                    </div>
-                                    <div class="form-check" style="display: inline-block">
-                                        <input class="form-check-input" type="radio" name="exampleRadios2" id="exampleRadios6" value="option6">
-                                        <label class="form-check-label" for="exampleRadios6">
-                                            Выбрать
-                                        </label>
-                                        <div class="form-group" style="display: inline-block">
-                                            <div class="input-group mb-4">
-                                                <input class="form-control" id="exampleInputIcon2" placeholder="Пример: 1, 2, 3, 5-8..." aria-label="Input group" type="text">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                            </div>
-                            <!-- End Content -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <MudToolBar DisableGutters="true" Class="gap-4">
-                <MudButton OnClick="Back" Disabled="false" Class="button" DisableRipple="true" DisableElevation="false">Назад</MudButton>
-                <MudButton Disabled="false" Class="button" DisableRipple="true" DisableElevation="false">Оформить заказ</MudButton>
-            </MudToolBar>
+            <Site.Pages.PrintParameters pagesCounter = "@pagesCounter" ParentMethod = "@Back" transition = "transition"/>
         </MudCarouselItem>
-
 
         <MudCarouselItem Transition="transition">
             <div class="d-flex" style="height:100%">
@@ -568,48 +421,11 @@
         indeterminate = true;
         var ms = new MemoryStream();
         await file.OpenReadStream(5120000000).CopyToAsync(ms);
-        await File.WriteAllBytesAsync(_path + file.Name, ms.ToArray());
+        await File.WriteAllBytesAsync(full_path, ms.ToArray());
 
-        runConvertFileToPdf(full_path);
+        FileService.runConvertFileToPdf(full_path);
 
-        if (Path.GetExtension(_path + file.Name).Contains(".docx"))
-        {
-            DocumentCore dc = DocumentCore.Load(_path + file.Name);
-            pagesCounter = Convert.ToInt32(dc?.Document.Properties.BuiltIn[BuiltInDocumentProperty.Pages]);
-            Console.WriteLine(_path + file.Name);
-            Console.WriteLine(pagesCounter);
-        }
-
-        if (Path.GetExtension(_path + file.Name).Contains(".doc"))
-        {
-            DocumentCore dc = DocumentCore.Load(_path + file.Name);
-            dc.CalculateStats();
-            pagesCounter = Convert.ToInt32(dc?.Document.Properties.BuiltIn[BuiltInDocumentProperty.Pages]);
-            Console.WriteLine(_path + file.Name);
-            Console.WriteLine(pagesCounter);
-        }
-
-        if (Path.GetExtension(_path + file.Name).Contains(".pdf"))
-        {
-            PdfDocument pdfDocument = new PdfDocument(new PdfReader(_path + file.Name));
-            pagesCounter = pdfDocument.GetNumberOfPages();
-        }
-
-        if (Path.GetExtension(_path + file.Name).Contains(".xls"))
-        {
-            Workbook wb = new Workbook();
-            wb.LoadFromFile(_path + file.Name);
-            var pageInfoList = wb.GetSplitPageInfo();
-            int sheetCount = pageInfoList.Count;
-            int pageCount = 0;
-            Console.WriteLine(sheetCount);
-            for (int i = 0; i < sheetCount; i++)
-            {
-                pageCount += pageInfoList[i].Count;
-                Console.WriteLine(pageCount);
-                pagesCounter = pageCount;
-            }
-        }
+        pagesCounter = FileService.CountPages(full_path);
 
         if (pagesCounter != 0)
         {
@@ -633,56 +449,6 @@
     private void ClearDragClass()
     {
         DragClass = DefaultDragClass;
-    }
-
-    private void runConvertFileToPdf(string full_file_name)
-    {
-        string full_path = Path.GetFullPath(full_file_name);
-        string ext = Path.GetExtension(full_path);
-        string file_name_pdf = Path.GetDirectoryName(full_path) + "\\convert_file_" + Path.GetFileNameWithoutExtension(full_path) + "_.pdf";
-
-        switch (ext)
-        {
-            case ".doc":
-            case ".docx":
-                var appWord = new Microsoft.Office.Interop.Word.Application();
-                appWord.Visible = false;
-                // appWord.DisplayAlerts = False;
-                if (appWord.Documents != null)
-                {
-                    //    yourDoc is your word document
-                    var wordDocument = appWord.Documents.Open(full_path);
-
-                    if (wordDocument != null)
-                    {
-                        wordDocument.ExportAsFixedFormat(file_name_pdf, Microsoft.Office.Interop.Word.WdExportFormat.wdExportFormatPDF);
-                        //wordDocument.Close(false, "", false);
-                        wordDocument.Close();
-                    }
-                    appWord.Quit();
-                }
-                break;
-            case ".xls":
-            case ".xlsx":
-                var appExel = new Microsoft.Office.Interop.Excel.Application();
-                appExel.Visible = false;
-                if (appExel.Workbooks != null)
-                {
-                    var excelDocument = appExel.Workbooks.Open(full_path);
-                    if(excelDocument != null)
-                    {
-                        excelDocument.ExportAsFixedFormat(Microsoft.Office.Interop.Excel.XlFixedFormatType.xlTypePDF, file_name_pdf);
-                        excelDocument.Close(); //Close document
-
-                    }
-
-                    appExel.Quit(); //Important: When you forget this Excel keeps running in the background
-                }
-                break;
-            default:
-                return;
-        }
-        return;
     }
 
     private static void CheckAllPagesInkCoverage()
